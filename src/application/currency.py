@@ -9,12 +9,12 @@ class CurrencyRateService:
 
     async def get_converted_value(self, _from: str, to: str, value: int):
         try:
-            converted_value = await self._get_converted_value(_from, to, value) 
-        except InvalidBaseRate as e:
+            converted_value = await self._get_converted_value(_from, to, value)
+        except InvalidBaseRate:
             raise CurrencyApiError("invalid to currency")
-        except BaseCurrencyApiError as e:
+        except BaseCurrencyApiError:
             raise CurrencyApiError("external currency api error")
-        except NotFoundCurrencyForExchange as e:
+        except NotFoundCurrencyForExchange:
             raise CurrencyApiError("not found from currency")
         return converted_value
 

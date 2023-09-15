@@ -15,6 +15,10 @@ pydantic-settings = "^2.0.3"
 uvicorn = {extras = ["standard"], version = "^0.23.2"}
 
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.289"
+black = "^23.9.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

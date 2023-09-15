@@ -6,17 +6,17 @@ from src.infrastructure import exception
 from src.application import dto
 
 
-
 class FreeOpenExchangerCurrencyApi:
     api: Final = "https://openexchangerates.org/api/"
 
-    def __init__(self, session: aiohttp.ClientSession , token: str) -> None:
+    def __init__(self, session: aiohttp.ClientSession, token: str) -> None:
         self._session = session
         self._token = token
 
-
     async def get_currency_rate(self, base: str) -> dto.CurrencyRate:
-        async with self._session.get(f"{self.api}/latest.json?app_id={self._token}") as resp:
+        async with self._session.get(
+            f"{self.api}/latest.json?app_id={self._token}"
+        ) as resp:
             resp = await resp.json()
 
         rate = self._process_response(resp)
@@ -29,25 +29,20 @@ class FreeOpenExchangerCurrencyApi:
             new_rates = {}
 
             for currency, r in rate.rates.items():
-                new_rates[currency] = right_base * 100 / (r * 100) 
-
+                new_rates[currency] = right_base * 100 / (r * 100)
 
             rate = dto.CurrencyRate(base=right_base, rates=new_rates)
 
         return rate
 
-
     @staticmethod
     def _process_response(resp: dict):
         if resp.get("error"):
             message = resp.get("message")
-            
+
             if message == "invalid_base":
                 raise exception.InvalidBaseRate(message)
             else:
                 raise exception.BaseCurrencyApiError(message)
-        
+
         return dto.CurrencyRate.from_dict(resp)
-
-            
-

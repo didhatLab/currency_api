@@ -5,4 +5,3 @@ class BaseCurrencyApiError(Exception):
 
 class InvalidBaseRate(BaseCurrencyApiError):
     pass
-
