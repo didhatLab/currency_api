@@ -5,6 +5,7 @@ from src.presentation.route import api
 from src.application.currency import CurrencyRateService
 from src.infrastructure.config import AppConfig 
 from src.infrastructure.currency_api import OpenExchangerCurrencyApi
+from src.presentation.providers import get_currency_service
 
 
 def build_app():
@@ -20,7 +21,7 @@ def build_app():
     currency_exchange_service = CurrencyRateService(currency_api)
 
 
-    app.dependency_overrides[CurrencyRateService] = currency_exchange_service
+    app.dependency_overrides[get_currency_service] = lambda: currency_exchange_service
 
     app.on_event("shutdown")(get_resource_cleaner())
 
