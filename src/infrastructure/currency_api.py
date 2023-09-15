@@ -7,7 +7,7 @@ from src.application import dto
 
 
 
-class OpenExchangerCurrencyApi:
+class FreeOpenExchangerCurrencyApi:
     api: Final = "https://openexchangerates.org/api/"
 
     def __init__(self, session: aiohttp.ClientSession , token: str) -> None:
@@ -19,7 +19,23 @@ class OpenExchangerCurrencyApi:
         async with self._session.get(f"{self.api}/latest.json?app_id={self._token}") as resp:
             resp = await resp.json()
 
-        return self._process_response(resp)
+        rate = self._process_response(resp)
+
+        if rate.base != base:
+            right_base = rate.rates.get(base)
+            if right_base is None:
+                raise exception.InvalidBaseRate("invalid base")
+
+            new_rates = {}
+
+            for currency, r in rate.rates.items():
+                new_rates[currency] = right_base * 100 / (r * 100) 
+
+
+            rate = dto.CurrencyRate(base=right_base, rates=new_rates)
+
+        return rate
+
 
     @staticmethod
     def _process_response(resp: dict):
