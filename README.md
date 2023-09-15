@@ -28,7 +28,7 @@ cd currency_api
 After build and run docker container
 ```bash
 docker build -t currency_api .
-docker run -e open_exchange_app_id='your_open_exchange_app_id' -p 8000:8000  test
+docker run -e open_exchange_app_id='your_open_exchange_app_id' -p 8000:8000 currency_api
 ```
 
 ### Possible improvements
