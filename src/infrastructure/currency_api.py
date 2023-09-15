@@ -15,7 +15,7 @@ class OpenExchangerCurrencyApi:
         self._token = token
 
 
-    async def get_currency_rate(self, base: str):
+    async def get_currency_rate(self, base: str) -> dto.CurrencyRate:
         async with self._session.get(f"{self.api}/latest.json?app_id={self._token}") as resp:
             resp = await resp.json()
 
