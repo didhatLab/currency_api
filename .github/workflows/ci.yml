@@ -28,3 +28,6 @@ jobs:
       - name: Black check
         run: |
           black --check .
+      - name: Tests
+        run: |
+          pytest
