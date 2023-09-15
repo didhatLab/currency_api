@@ -16,7 +16,6 @@ class CurrencyRateService:
             raise CurrencyApiError("external currency api error")
         except NotFoundCurrencyForExchange as e:
             raise CurrencyApiError("not found to currency")
-        
         return rate
 
     async def _get_currency_rate(self, _from: str, to: str):

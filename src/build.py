@@ -8,11 +8,11 @@ from src.infrastructure.currency_api import OpenExchangerCurrencyApi
 from src.presentation.providers import get_currency_service
 
 
-def build_app():
+async def build_app():
     config = AppConfig()
 
     app = FastAPI()
-    api.include_router(api)
+    app.include_router(api)
 
     session = aiohttp.ClientSession()
 
@@ -23,7 +23,7 @@ def build_app():
 
     app.dependency_overrides[get_currency_service] = lambda: currency_exchange_service
 
-    app.on_event("shutdown")(get_resource_cleaner())
+    app.on_event("shutdown")(get_resource_cleaner(session))
 
     return app
 

@@ -9,7 +9,7 @@ api = APIRouter()
 
 
 @api.get("/api/rates")
-async def exchange_currency(to: str,  _from: str = Query(alias="from"), currency_service = Depends(get_currency_service)) -> CurrencyExchangeResponse:
-    rate = currency_service.get_currency_rate(_from, to)
+async def exchange_currency(to: str, _from: str = Query(alias="from"), currency_service = Depends(get_currency_service)) -> CurrencyExchangeResponse:
+    rate = await currency_service.get_currency_rate(_from, to)
     
-    return CurrencyExchangeResponse(rate)
+    return CurrencyExchangeResponse(value=rate)
