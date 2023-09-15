@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "currency-api"
+version = "0.1.0"
+description = ""
+authors = ["'"]
+readme = "README.md"
+packages = [{include = "currency_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiohttp = {extras = ["speedups"], version = "^3.8.5"}
+attrs = "^23.1.0"
+cattrs = "^23.1.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
