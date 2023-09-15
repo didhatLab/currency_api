@@ -7,23 +7,23 @@ class CurrencyRateService:
     def __init__(self, currency_api: CurrencyApi):
         self._currency_api = currency_api
 
-    async def get_currency_rate(self, _from: str, to: str):
+    async def get_converted_value(self, _from: str, to: str, value: int):
         try:
-            rate = await self._get_currency_rate(_from, to) 
+            converted_value = await self._get_converted_value(_from, to, value) 
         except InvalidBaseRate as e:
-            raise CurrencyApiError("invalid from currency")
+            raise CurrencyApiError("invalid to currency")
         except BaseCurrencyApiError as e:
             raise CurrencyApiError("external currency api error")
         except NotFoundCurrencyForExchange as e:
-            raise CurrencyApiError("not found to currency")
-        return rate
+            raise CurrencyApiError("not found from currency")
+        return converted_value
 
-    async def _get_currency_rate(self, _from: str, to: str):
-        rate = await self._currency_api.get_currency_rate(_from)
+    async def _get_converted_value(self, _from: str, to: str, value: float):
+        rate = await self._currency_api.get_currency_rate(to)
 
-        to_rate = rate.rates.get(to)
+        from_rate = rate.rates.get(_from)
 
-        if to_rate is None:
+        if from_rate is None:
             raise NotFoundCurrencyForExchange()
 
-        return to_rate
+        return from_rate * value
