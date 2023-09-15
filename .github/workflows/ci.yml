@@ -31,3 +31,6 @@ jobs:
       - name: Tests
         run: |
           pytest
+      - name: Mypy check
+        run: |
+          mypy src/

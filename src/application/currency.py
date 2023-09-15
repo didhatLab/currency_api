@@ -7,7 +7,7 @@ class CurrencyRateService:
     def __init__(self, currency_api: CurrencyApi):
         self._currency_api = currency_api
 
-    async def get_converted_value(self, _from: str, to: str, value: int):
+    async def get_converted_value(self, _from: str, to: str, value: int | float):
         try:
             converted_value = await self._get_converted_value(_from, to, value)
         except InvalidBaseRate:

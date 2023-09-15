@@ -1,4 +1,4 @@
-from typing import Final
+from typing import Final, cast
 
 import aiohttp
 
@@ -17,9 +17,9 @@ class FreeOpenExchangerCurrencyApi:
         async with self._session.get(
             f"{self.api}/latest.json?app_id={self._token}"
         ) as resp:
-            resp = await resp.json()
+            json_resp = await resp.json()
 
-        rate = self._process_response(resp)
+        rate = self._process_response(json_resp)
 
         if rate.base != base:
             right_base = rate.rates.get(base)
@@ -31,14 +31,14 @@ class FreeOpenExchangerCurrencyApi:
             for currency, r in rate.rates.items():
                 new_rates[currency] = right_base * 100 / (r * 100)
 
-            rate = dto.CurrencyRate(base=right_base, rates=new_rates)
+            rate = dto.CurrencyRate(base=base, rates=new_rates)
 
         return rate
 
     @staticmethod
-    def _process_response(resp: dict):
+    def _process_response(resp: dict) -> dto.CurrencyRate:
         if resp.get("error"):
-            message = resp.get("message")
+            message = cast(str, resp.get("message"))
 
             if message == "invalid_base":
                 raise exception.InvalidBaseRate(message)
